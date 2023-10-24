@@ -13,13 +13,13 @@
 <div class="tabs">
   <!-- Вкладки -->
   <div class="tabs-header">
-    <div data-tab-target="tab-1">Tab 1</div>
-    <div data-tab-target="tab-2">Tab 2</div>
-    <div data-tab-target="tab-3">Tab 3</div>
+    <div data-tab-target="tab-1" data-name="tab1">Tab 1</div>
+    <div data-tab-target="tab-2" data-name="tab2">Tab 2</div>
+    <div data-tab-target="tab-3" data-name="tab3">Tab 3</div>
   </div>
   <!-- Окна для вкладок -->
   <div class="tabs-windows">
-    <div data-tab-content="tab-1-content">Content for Tab 1</div>
+    <div data-tab-content="tab-1-content" data-name="window1">Content for Tab 1</div>
     <div data-tab-content="tab-2-content">Content for Tab 2</div>
     <div data-tab-content="tab-3-content">Content for Tab 3</div>
   </div>
@@ -31,6 +31,9 @@
   const tabs = document.querySelector('.tabs-header')
   const tabsWindows = document.querySelector('.tabs-windows')
   const windowTabs = new WindowTabs(tabs, tabsWindows)
+
+  console.log(windowTabs.tabContent)
+  console.log(windowTabs.tabWindows)
 </script>
 </body>
 

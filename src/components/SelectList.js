@@ -1,9 +1,18 @@
+import BaseComponent from "./BaseComponent.js";
+
 /**
  * Класс SelectList представляет собой список с возможностью выбора элемента.
+ * @extends BaseComponent
  */
-class SelectList {
+class SelectList extends BaseComponent {
     element
     activeItem = null
+
+    /**
+     * Объект, содержащий элементы списка с ключами в виде атрибутов 'data-name'.
+     * @type {Object}
+     */
+    listItems = {}
 
     /**
      * Создает новый объект SelectList.
@@ -12,10 +21,12 @@ class SelectList {
      * @param {boolean} options.isRequired - Определяет, должен ли быть выбран хотя бы один элемент (по умолчанию true).
      */
     constructor(element, {isRequired = true} = {}) {
+        super(element)
+
         this.element = element
         this.isRequired = isRequired
 
-        this.element.classList.add('select-list')
+        this.addClass('select-list')
 
         this.bindEvents()
         this.addSelectListItemClass()
@@ -23,70 +34,21 @@ class SelectList {
     }
 
     /**
-     * Геттер для получения внутреннего HTML содержимого элемента SelectList.
-     * @returns {string} - Внутреннее HTML содержимое элемента.
-     */
-    get innerHTML() {
-        return this.element.innerHTML
-    }
-
-    /**
-     * Сеттер для установки внутреннего HTML содержимого элемента SelectList.
-     * @param {string} html - HTML строка для установки внутреннего содержимого элемента.
-     */
-    set innerHTML(html) {
-        this.element.innerHTML = html
-    }
-
-    /**
-     * Добавляет слушателя события к элементу SelectList.
-     * @param {string} type - Тип события.
-     * @param {Function} listener - Функция-обработчик события.
-     */
-    addEventListener(type, listener) {
-        if (this.element.addEventListener) {
-            this.element.addEventListener(type, listener)
-        } else if (this.element.attachEvent) {
-            this.element.attachEvent('on' + type, listener)
-        } else {
-            this.element['on' + type] = listener
-        }
-    }
-
-    /**
-     * Удаляет слушателя события у элемента SelectList.
-     * @param {string} type - Тип события.
-     * @param {Function} listener - Функция-обработчик события.
-     */
-    removeEventListener(type, listener) {
-        if (this.element.removeEventListener) {
-            this.element.removeEventListener(type, listener)
-        } else if (this.element.detachEvent) {
-            this.element.detachEvent('on' + type, listener)
-        } else {
-            this.element['on' + type] = null
-        }
-    }
-
-    /**
-     * Инициирует событие у элемента SelectList.
-     * @param {Event} event - Объект события для инициации.
-     */
-    dispatchEvent(event) {
-        if (this.element.dispatchEvent) {
-            this.element.dispatchEvent(event)
-        } else if (this.element.fireEvent) {
-            this.element.fireEvent('on' + event.type, event)
-        }
-    }
-
-    /**
-     * Добавляет класс 'select-list__item' ко всем дочерним элементам элемента SelectList.
+     * Добавляет класс 'select-list__item' ко всем дочерним элементам элемента SelectList
+     * и формирует объект listItems с ключами в виде атрибутов 'data-name'.
      */
     addSelectListItemClass() {
+        this.listItems = {}
+
         const childElements = this.element.children
         for (let i = 0; i < childElements.length; i++) {
-            childElements[i].classList.add('select-list__item')
+            const elem = childElements[i]
+            elem.classList.add('select-list__item')
+
+            const itemName = elem.getAttribute('data-name')
+            if (itemName) {
+                this.listItems[itemName] = elem
+            }
         }
     }
 
@@ -109,6 +71,9 @@ class SelectList {
                 this.activeItem = firstItem
             }
         }
+
+        const event = new Event('listUpdate', {bubbles: true})
+        this.dispatchEvent(event)
     }
 
     /**
