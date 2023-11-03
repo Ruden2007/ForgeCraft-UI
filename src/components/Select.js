@@ -1,39 +1,42 @@
 import BaseComponent from "./BaseComponent.js"
 
-/**
- * Класс SelectList представляет собой список с возможностью выбора элемента.
- * @extends BaseComponent
- */
 class SelectList extends BaseComponent {
-    /**
-     * Активный элемент списка.
-     * @type {HTMLElement|null}
-     */
     activeItem = null
-
-    /**
-     * Определяет, должен ли быть выбран хотя бы один элемент (по умолчанию true).
-     * @type {boolean}
-     */
     isRequired
 
-    /**
-     * Создает новый объект SelectList.
-     * @param {HTMLElement} element - Элемент DOM, представляющий выпадающий список.
-     * @param {object} options - Дополнительные настройки для создания объекта SelectList.
-     * @param {boolean} [options.isRequired=true] - Определяет, должен ли быть выбран хотя бы один элемент.
-     */
     constructor(element, {isRequired = true} = {}) {
         super(element)
 
         this.element = element
         this.isRequired = isRequired
 
-        this.addClass('select-list')
+        this.createSelect()
+
 
         this.bindEvents()
-        this.addSelectListItemClass()
         this.initializeActiveItem()
+    }
+
+    /**
+     * Получает текущее значение выбранного элемента выпадающего списка.
+     * @returns {string} - Значение выбранного элемента.
+     */
+    get value() {
+        return this.element.value
+    }
+
+    /**
+     * Устанавливает новое значение выбранного элемента выпадающего списка.
+     * @param {string} newValue - Новое значение для установки.
+     */
+    set value(newValue) {
+        const selectedOption = this.selectContainer.querySelector(`[data-value="${newValue}"]`)
+        if (selectedOption && selectedOption.dataset.disabled !== 'true') {
+            this.selectedItem = selectedOption
+
+            const event = new Event('change', { bubbles: true })
+            this.dispatchEvent(event)
+        }
     }
 
     /**
@@ -47,10 +50,12 @@ class SelectList extends BaseComponent {
             }
             selectedItem.classList.add('active')
             this.activeItem = selectedItem
+            this.element.value = selectedItem.dataset.value
         } else if (selectedItem === this.activeItem) {
             if (!this.isRequired) {
                 selectedItem.classList.remove('active')
                 this.activeItem = null
+                this.element.value = null
             }
         }
 
@@ -66,16 +71,24 @@ class SelectList extends BaseComponent {
         return this.activeItem
     }
 
-    /**
-     * Добавляет класс 'select-list__item' ко всем дочерним элементам элемента SelectList.
-     */
-    addSelectListItemClass() {
+    createSelect() {
+        this.element.style.display = 'none'
 
-        const childElements = this.element.children
-        for (let i = 0; i < childElements.length; i++) {
-            const elem = childElements[i]
-            elem.classList.add('select-list__item')
-        }
+        this.selectContainer = document.createElement('div')
+        this.selectContainer.classList.add('select-list')
+
+
+        this.element.insertAdjacentElement('afterend', this.selectContainer)
+
+        const options = this.element.querySelectorAll('option')
+        options.forEach(option => {
+            const listItem = document.createElement('div')
+            listItem.classList.add('select-list__item')
+            listItem.textContent = option.textContent
+            listItem.dataset.value = option.value
+            if (option.disabled) listItem.dataset.disabled = 'true'
+            this.selectContainer.appendChild(listItem)
+        })
     }
 
     /**
@@ -87,11 +100,11 @@ class SelectList extends BaseComponent {
         /**
          * @type {HTMLElement}
          */
-        const activeItem = this.element.querySelector('.select-list__item.active')
+        const activeItem = this.selectContainer.querySelector('.select-list__item.active')
         if (activeItem) {
             this.activeItem = activeItem
         } else if (this.isRequired) {
-            const firstItem = this.element.querySelector('.select-list__item')
+            const firstItem = this.selectContainer.querySelector('.select-list__item')
             if (firstItem) {
                 firstItem.classList.add('active')
                 this.activeItem = firstItem
@@ -106,25 +119,15 @@ class SelectList extends BaseComponent {
      * Привязывает события к элементу SelectList для обработки выбора элемента.
      */
     bindEvents() {
-        this.element.addEventListener('click', e => {
+        this.selectContainer.addEventListener('click', e => {
             const selectedItem = e.target.closest('.select-list__item')
             if (selectedItem) {
                 this.selectedItem = selectedItem
+                this.element.value = selectedItem.dataset.value
             }
         })
-
-        const callback = (mutationList) => {
-            for (const mutation of mutationList) {
-                if (mutation.type !== "childList") return false
-                this.addSelectListItemClass()
-                this.initializeActiveItem()
-            }
-        }
-
-        const observer = new MutationObserver(callback)
-
-        observer.observe(this.element, {childList: true})
     }
+
 }
 
-export default SelectList
+export default SelectList 

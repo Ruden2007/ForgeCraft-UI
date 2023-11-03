@@ -4,37 +4,171 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WindowTabs Example</title>
+  <title>Компоненты ForgeCraft UI</title>
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/src/base-style.css">
 </head>
 
 <body>
-<div class="tabs">
-  <!-- Вкладки -->
-  <div class="tabs-header">
-    <div data-tab-target="tab-1" data-name="tab1">Tab 1</div>
-    <div data-tab-target="tab-2" data-name="tab2">Tab 2</div>
-    <div data-tab-target="tab-3" data-name="tab3">Tab 3</div>
-  </div>
-  <!-- Окна для вкладок -->
-  <div class="tabs-windows">
-    <div data-tab-content="tab-1-content" data-name="window1">Content for Tab 1</div>
-    <div data-tab-content="tab-2-content">Content for Tab 2</div>
-    <div data-tab-content="tab-3-content">Content for Tab 3</div>
-  </div>
-</div>
+<header>
+  <h1>Компоненты ForgeCraft UI</h1>
+</header>
+<main>
+  <section class="select-list">
+    <a href="#SelectList" name="SelectList" class="section__title">SelectList</a>
+    <div class="main__column-1">
+      <h3>Выберите элемент из списка:</h3>
+      <p>(isRequired: true)</p>
+      <div class="list-1 select-list">
+        <div class="list-elem select-list__item active">Element 1</div>
+        <div class="list-elem select-list__item">Element 2</div>
+        <div class="list-elem select-list__item">Element 3</div>
+        <div class="list-elem select-list__item">Element 4</div>
+      </div>
+    </div>
+    <div class="main__column-2">
+      <h3>Выберите элемент из списка:</h3>
+      <p>(isRequired: false)</p>
+      <div class="list-2">
+        <div>Element 1</div>
+        <div>Element 2</div>
+        <div>Element 3</div>
+        <div>Element 4</div>
+      </div>
+    </div>
+    <p>
+      Класс <b>SelectList</b> представляет собой список с возможностью выбора элемента. Основные возможности класса включают::
+    </p>
+    <ol>
+      <li>Автоматически отображает активный элемент списка и устанавливает его как выбранный.</li>
+      <li>Поддерживает опцию 'isRequired', которая определяет, должен ли быть выбран хотя бы один элемент (по умолчанию true).</li>
+      <li>Генерирует событие 'change' при изменении выбранного элемента.</li>
+      <li>Поддерживает добавление и удаление элементов.</li>
+      <li>Обновляет список при добавлении или удалении элементов.</li>
+      <li>Позволяет устанавливать выбранный элемент.</li>
+    </ol>
+  </section>
+
+  <section class="select">
+    <a href="#Select" name="Select" class="section__title">Select</a>
+    <div class="main__column-1">
+      <h3>Выберите элемент из списка:</h3>
+      <p>(isRequired: true)</p>
+      <select name="cars">
+        <option value="volvo">Volvo</option>
+        <option value="saab" disabled>Saab</option>
+        <option value="mercedes">Mercedes</option>
+        <option value="audi">Audi</option>
+      </select>
+      <select multiple>
+        <option value="volvo">Volvo</option>
+        <option value="saab" disabled>Saab</option>
+        <option value="mercedes">Mercedes</option>
+        <option value="audi">Audi</option>
+      </select>
+    </div>
+  </section>
+
+  <section class="tabs">
+    <a href="#WindowTabs" name="WindowTabs" class="section__title">WindowTabs</a>
+    <div class="tabs-container">
+      <!-- Вкладки -->
+      <div class="tabs-header" tabindex="1">
+        <div data-tab-target="tab-1">Tab 1</div>
+        <div data-tab-target="tab-2">Tab 2</div>
+        <div data-tab-target="tab-3">Tab 3</div>
+      </div>
+      <!-- Окна для вкладок -->
+      <div class="tabs-windows">
+        <div data-tab-content="tab-1-content">Content for Tab 1</div>
+        <div data-tab-content="tab-2-content">Content for Tab 2</div>
+        <div data-tab-content="tab-3-content">Content for Tab 3</div>
+      </div>
+    </div>
+    <p>
+      Класс <b>WindowTabs</b> предоставляет удобный интерфейс с вкладками и окнами для управления контентом. Возможности класса включают:
+    </p>
+    <ol>
+      <li>Создание вкладок с соответствующими окнами контента.</li>
+      <li>Установка активной вкладки и отображение соответствующего окна.</li>
+      <li>Добавление и удаление вкладок и их связанных окон.</li>
+      <li>Позволяет управлять видимостью вкладок и окон.</li>
+      <li>Предоставляет событие 'changeWindow' при изменении активного окна.</li>
+      <li>Поддержка управления с клавиатуры (при включенной опции).</li>
+    </ol>
+  </section>
+
+  <section class="dropdown">
+    <a href="#Dropdown" name="Dropdown" class="section__title">Dropdown</a>
+    <select class="drop">
+      <option value="volvo">Volvo</option>
+      <option value="saab" disabled>Saab</option>
+      <option value="mercedes">Mercedes</option>
+      <option value="audi">Audi</option>
+    </select>
+    <p>
+      Класс <b>Dropdown</b> обладает различными функциональностями:
+    </p>
+    <ol>
+      <li>Позволяет создавать выпадающий список на основе элемента <b>select</b>.</li>
+      <li>Предоставляет возможность отображать текст-плейсхолдер, когда ни один элемент не выбран.</li>
+      <li>Позволяет устанавливать максимальное количество элементов в выпадающем списке без необходимости прокрутки.</li>
+      <li>Позволяет устанавливать и получать значения выбранного элемента.</li>
+      <li>Позволяет устанавливать и получать значения выбранного элемента.</li>
+      <li>Автоматически обновляет стили выпадающего списка в зависимости от настроек, включая динамическую проверку прокрутки и позиционирование списка относительно кнопки.</li>
+      <li>Дает возможность изменять выбранный вариант с использованием колесика мыши.</li>
+      <li>Позволяет запрещать выбор определенных вариантов в списке.</li>
+    </ol>
+  </section>
+</main>
+<footer>
+  © 2023 Ruden. Все права защищены.
+</footer>
+<script>
+  let list1
+  let list2
+  let windowTabs
+  let dropdown
+  let selectL
+</script>
+<script src="/src/ForgeCraft.js"></script>
 <script type="module">
   import WindowTabs from "./src/components/WindowTabs.js"
+  import Dropdown from "./src/components/Dropdown.js"
+  import SelectList from "./src/components/SelectList.js"
+  import Select from "./src/components/Select.js";
 
+
+  list1 = new SelectList(document.querySelector('.list-1'), { isRequired: true })
+  list2 = new SelectList(document.querySelector('.list-2'), { isRequired: false })
 
   const tabs = document.querySelector('.tabs-header')
   const tabsWindows = document.querySelector('.tabs-windows')
-  const windowTabs = new WindowTabs(tabs, tabsWindows)
+  windowTabs = new WindowTabs(tabs, tabsWindows)
 
-  console.log(windowTabs.tabContent)
-  console.log(windowTabs.tabWindows)
+  const tab1Content = document.createElement('div')
+  tab1Content.textContent = 'Содержимое вкладки 4'
+  windowTabs.addTab('tab-4', 'Вкладка 4', tab1Content)
+
+
+  const select = document.querySelector('select.drop')
+  dropdown = new Dropdown(select, {placeholderText: 'Выберите вариант', maxItems: 3})
+  dropdown.options = [
+    {value: "text1", text: "Text 1"},
+    {value: "text2", text: "Text 2"},
+    {value: "text3", text: "Text 3", disabled: true},
+    {value: "text4", text: "Text 4"},
+    {value: "text5", text: "Text 5"},
+    {value: "text6", text: "Text 6"},
+    {value: "text6", text: "Text 6"},
+    {value: "text7", text: "Text 7"},
+    {value: "text8", text: "Text 8"}
+  ]
+
+  const list3 = document.querySelector('select[name="cars"]')
+  selectL = new Select(list3)
+
 </script>
 </body>
-
 </html>

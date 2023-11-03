@@ -1,0 +1,96 @@
+[data-disabled] {
+    cursor: default;
+    color: #aaaaaa;
+}
+
+.select-list__item {
+    display: block;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.select-list__item:hover,
+.select-list__item.active {
+    background-color: rgba(100, 104, 107, 0.44);
+}
+
+
+/* Стили для вкладок */
+.tabs-container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+}
+
+.tabs-header {
+    display: flex;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #cccccc;
+}
+
+.tabs-header .select-list__item {
+    flex: 1 1 auto;
+    text-align: center;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-right: 1px solid #ccc;
+    transition: background-color 0.3s ease;
+}
+
+.tabs-header .select-list__item:last-child {
+    border-right: none;
+}
+
+.tabs-header .select-list__item.active {
+    background-color: #cdcdcd;
+}
+
+.tabs-header .select-list__item:hover {
+    background-color: #ddd;
+}
+
+/* Стили для окон вкладок */
+.tabs-windows .tab-window {
+    display: none;
+    padding: 20px;
+    border-top: 1px solid #ccc;
+}
+
+/* Показываем активное окно */
+.tabs-windows .tab-window.active {
+    display: block;
+}
+
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-button {
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.dropdown-list {
+    display: none;
+    position: absolute;
+    left: 0;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    width: auto;
+    margin: 4px 0 -4px;
+}
+
+.dropdown-container.opened .dropdown-list {
+    display: block;
+}
+
+.dropdown-option {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown-option:hover {
+    background-color: #f0f0f0;
+}

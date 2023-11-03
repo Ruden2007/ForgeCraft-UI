@@ -6,39 +6,116 @@ import SelectList from './SelectList.js'
  */
 class WindowTabs extends SelectList {
     /**
-     * Активная вкладка.
+     * Активное окно.
      * @type {HTMLElement|null}
      */
-    activeTab = null
-
-    /**
-     * Другое название для списка вкладок(для удобства).
-     * Объект, содержащий вкладки с ключами в виде атрибутов 'data-name'.
-     * @type {Object}
-     */
-    tabContent = this.listItems
-
-    /**
-     * Объект, содержащий окна с ключами в виде атрибутов 'data-name'.
-     * @type {Object}
-     */
-    tabWindows = {}
-
+    activeWindow = null
 
     /**
      * Создает новый объект WindowTabs.
      * @param {HTMLElement} tabContainer - Элемент DOM, представляющий контейнер с вкладками.
      * @param {HTMLElement} windowContainer - Элемент DOM, представляющий контейнер с окнами для вкладок.
-     * @param {object} options - Дополнительные настройки для создания объекта WindowTabs.
-     * @param {boolean} options.isRequired - Определяет, должен ли быть выбран хотя бы один элемент (по умолчанию true).
+     * @param {object} [options] - Дополнительные настройки для создания объекта WindowTabs.
+     * @param {boolean} [options.isRequired] - Определяет, должен ли быть выбран хотя бы один элемент (по умолчанию true).
+     * @param {boolean} [options.enableKeyboardNavigation] - Включает/выключает управление вкладками с клавиатуры (по умолчанию true).
      */
     constructor(tabContainer, windowContainer, options = {}) {
         super(tabContainer, options)
 
+        this.enableKeyboardNavigation = options.enableKeyboardNavigation !== undefined ? options.enableKeyboardNavigation : true
+
         this.element.classList.add('window-tabs')
+        
+        this.tabContainer = tabContainer
         this.windowContainer = windowContainer
+
         this.addTabWindowClass()
         this.showSelectedWindow()
+    }
+
+    /**
+     * Устанавливает выбранное окно.
+     * @param {string} tabId - Id окна.
+     */
+    set window(tabId) {
+        const tab = this.tabContainer.querySelector(`[data-tab-target=${tabId}]`)
+        if (!tab) return false
+
+        this.selectedItem = tab
+    }
+
+    /**
+     * Получает выбранное окно.
+     * @returns {HTMLElement|null} - Выбранное окно.
+     */
+    get window() {
+        return this.activeWindow
+    }
+
+    /**
+     * Показывает выбранное окно вкладки.
+     * Генерирует событие 'changeWindow' при изменении активного окна.
+     */
+    showSelectedWindow() {
+        const selectedTabId = this.activeItem.getAttribute('data-tab-target')
+        const selectedWindow = document.querySelector(`[data-tab-content="${selectedTabId}-content"]`)
+
+        if (selectedWindow) {
+            if (selectedWindow !== this.activeWindow) {
+                if (this.activeWindow) {
+                    this.activeWindow.classList.remove('active')
+                }
+                selectedWindow.classList.add('active')
+                this.activeWindow = selectedWindow
+            } else if (selectedWindow === this.activeWindow) {
+                if (!this.isRequired) {
+                    selectedWindow.classList.remove('active')
+                    this.activeWindow = null
+                }
+            }
+
+            /**
+             * Событие, вызываемое при изменении активного окна.
+             * @event WindowTabs#changeWindow
+             * @type {Event}
+             */
+            const event = new Event('changeWindow', {bubbles: true})
+            this.dispatchEvent(event)
+        }
+    }
+
+    /**
+     * Добавляет новую вкладку и соответствующее окно.
+     * @param {string} tabId - Уникальный идентификатор вкладки.
+     * @param {string} tabText - Текст, отображаемый на вкладке.
+     * @param {HTMLElement} windowContent - Элемент DOM, представляющий содержимое окна вкладки.
+     */
+    addTab(tabId, tabText, windowContent) {
+        const tab = document.createElement('div')
+        tab.classList.add('tab')
+        tab.textContent = tabText
+        tab.setAttribute('data-tab-target', tabId)
+        this.tabContainer.appendChild(tab)
+
+        const windowContentWrapper = document.createElement('div')
+        windowContentWrapper.classList.add('tab-window')
+        windowContentWrapper.setAttribute('data-tab-content', `${tabId}-content`)
+        windowContentWrapper.appendChild(windowContent)
+        this.windowContainer.appendChild(windowContentWrapper)
+    }
+
+    /**
+     * Удаляет вкладку и соответствующее окно по их уникальному идентификатору.
+     * @param {string} tabId - Уникальный идентификатор вкладки для удаления.
+     */
+    removeTab(tabId) {
+        const tabToRemove = this.tabContainer.querySelector(`[data-tab-target="${tabId}"]`)
+        const windowContentToRemove = this.windowContainer.querySelector(`[data-tab-content="${tabId}-content"]`)
+
+        if (tabToRemove && windowContentToRemove) {
+            this.tabContainer.removeChild(tabToRemove)
+            this.windowContainer.removeChild(windowContentToRemove)
+        }
     }
 
     /**
@@ -58,7 +135,7 @@ class WindowTabs extends SelectList {
     }
 
     /**
-     * Привязывает события к элементу WindowTabs для обработки выбора вкладок.
+     * Привязывает события к элементу WindowTabs для обработки выбора вкладок и управления с клавиатуры.
      * @override
      */
     bindEvents() {
@@ -66,20 +143,27 @@ class WindowTabs extends SelectList {
 
         /**
          * Событие, вызываемое при выборе другой вкладки.
-         * @event WindowTabs#changeWindow
+         * @event SelectList#change
          * @type {Event}
          */
         this.addEventListener('change', () => {
             this.showSelectedWindow()
         })
 
-        /**
-         * Событие, вызываемое при обновлении списка вкладок.
-         * @event WindowTabs#listUpdate
-         * @type {Event}
-         */
-        this.addEventListener('listUpdate', () => {
-            this.tabContent = this.listItems
+        this.element.addEventListener('keydown', (e) => {
+            if (this.enableKeyboardNavigation) {
+                if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    const currentIndex = Array.from(this.element.children).findIndex(item => item === this.activeItem);
+                    let newIndex = currentIndex;
+                    if (e.key === 'ArrowRight') {
+                        newIndex = (currentIndex + 1) % this.element.children.length;
+                    } else if (e.key === 'ArrowLeft') {
+                        newIndex = (currentIndex - 1 + this.element.children.length) % this.element.children.length;
+                    }
+                    this.selectedItem = this.element.children[newIndex];
+                }
+            }
         })
     }
 
@@ -91,43 +175,6 @@ class WindowTabs extends SelectList {
         for (let i = 0; i < childElements.length; i++) {
             const elem = childElements[i]
             elem.classList.add('tab-window')
-
-            const itemName = elem.getAttribute('data-name')
-            if (itemName) {
-                this.tabWindows[itemName] = elem
-            }
-        }
-    }
-
-    /**
-     * Показывает выбранное окно вкладки.
-     * Генерирует событие 'changeWindow' при изменении активного окна.
-     */
-    showSelectedWindow() {
-        const selectedTabId = this.activeItem.getAttribute('data-tab-target')
-        const selectedWindow = document.querySelector(`[data-tab-content="${selectedTabId}-content"]`)
-
-        if (selectedWindow) {
-            if (selectedWindow !== this.activeTab) {
-                if (this.activeTab) {
-                    this.activeTab.classList.remove('active')
-                }
-                selectedWindow.classList.add('active')
-                this.activeTab = selectedWindow
-            } else if (selectedWindow === this.activeTab) {
-                if (!this.isRequired) {
-                    selectedWindow.classList.remove('active')
-                    this.activeTab = null
-                }
-            }
-
-            /**
-             * Событие, вызываемое при изменении активного окна.
-             * @event WindowTabs#changeWindow
-             * @type {Event}
-             */
-            const event = new Event('changeWindow', {bubbles: true})
-            this.dispatchEvent(event)
         }
     }
 }

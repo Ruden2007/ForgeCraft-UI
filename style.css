@@ -3,50 +3,70 @@
     padding: 0;
 }
 
-/* Стили для вкладок */
-.tabs {
+h1 {
+    margin: 1.3rem auto;
+}
+
+p {
+    margin: 1rem 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+main {
+    max-width: 600px;
+    margin: 2rem auto 1rem;
+    padding: 2rem;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+section {
     display: flex;
     flex-direction: column;
-    width: 300px; /* Укажите желаемую ширину для вкладок */
-    border: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #aaa;
 }
 
-.tabs-header {
-    display: flex;
-    background-color: #f1f1f1;
-    border-bottom: 1px solid #cccccc;
+section:last-child {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: none;
 }
 
-.tabs-header .select-list__item {
-    flex: 1 1 auto;
-    text-align: center;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-right: 1px solid #ccc;
-    transition: background-color 0.3s ease;
+.section__title {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
 }
 
-.tabs-header .select-list__item:last-child {
-    border-right: none;
+ol, ul {
+    margin-left: 1rem;
 }
 
-.tabs-header .select-list__item.active {
-    background-color: #cdcdcd;
+li {
+    list-style-position: inside;
+    margin-bottom: 3px;
 }
 
-.tabs-header .select-list__item:hover {
-    background-color: #ddd;
+li:last-child {
+    margin-bottom: 0;
 }
-
-/* Стили для окон вкладок */
-.tabs-windows .tab-window {
-    display: none;
-    padding: 20px;
-    border-top: 1px solid #ccc;
-}
-
-/* Показываем активное окно */
-.tabs-windows .tab-window.active {
-    display: block;
-}
-
