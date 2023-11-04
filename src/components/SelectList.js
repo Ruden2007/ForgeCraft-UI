@@ -1,129 +1,132 @@
 import BaseComponent from "./BaseComponent.js"
+import SelectableItems from "./SelectableItems.js";
 
-/**
- * Класс SelectList представляет собой список с возможностью выбора элемента.
- * @extends BaseComponent
- */
 class SelectList extends BaseComponent {
     /**
-     * Активный элемент списка.
-     * @type {HTMLElement|null}
+     * Создает новый объект SelectableSelect.
+     * @param {HTMLSelectElement} element - Элемент <select> для управления выбором.
+     * @param {Object} [options] - Настройки для управления выбором элементов.
+     * @param {boolean} [options.isRequired] - Флаг, указывающий, что выбор хотя бы одного элемента обязателен (по умолчанию false).
+     * @param {boolean} [options.enableKeyboardNavigation] - Флаг, разрешающий навигацию с клавиатуры (по умолчанию true).
+     * @param {string} [options.confirmKey] - Клавиша для подтверждения выбора элемента (по умолчанию 'Enter').
+     * @param {string} [options.prevKey] - Клавиша для перемещения к предыдущему элементу (по умолчанию 'ArrowUp').
+     * @param {string} [options.nextKey] - Клавиша для перемещения к следующему элементу (по умолчанию 'ArrowDown').
      */
-    activeItem = null
-
-    /**
-     * Определяет, должен ли быть выбран хотя бы один элемент (по умолчанию true).
-     * @type {boolean}
-     */
-    isRequired
-
-    /**
-     * Создает новый объект SelectList.
-     * @param {HTMLElement} element - Элемент DOM, представляющий выпадающий список.
-     * @param {object} options - Дополнительные настройки для создания объекта SelectList.
-     * @param {boolean} [options.isRequired=true] - Определяет, должен ли быть выбран хотя бы один элемент.
-     */
-    constructor(element, {isRequired = true} = {}) {
+    constructor(element, options = {
+        isRequired: true,
+        enableKeyboardNavigation: true,
+        confirmKey: 'Enter',
+        prevKey: 'ArrowUp',
+        nextKey: 'ArrowDown'
+    }) {
         super(element)
 
-        this.element = element
-        this.isRequired = isRequired
-
-        this.addClass('select-list')
-
+        this.createSelect()
+        this.selectable = new SelectableItems(this.selectContainer, options)
         this.bindEvents()
-        this.addSelectListItemClass()
-        this.initializeActiveItem()
+
+        this.initialiseActiveItems(options)
     }
 
     /**
-     * Устанавливает выбранный элемент списка.
-     * @param {HTMLElement} selectedItem - Выбранный элемент.
+     * Получает текущее значение выбранного элемента выпадающего списка.
+     * @returns {string} - Значение выбранного элемента.
      */
-    set selectedItem(selectedItem) {
-        if (selectedItem !== this.activeItem) {
-            if (this.activeItem) {
-                this.activeItem.classList.remove('active')
-            }
-            selectedItem.classList.add('active')
-            this.activeItem = selectedItem
-        } else if (selectedItem === this.activeItem) {
-            if (!this.isRequired) {
-                selectedItem.classList.remove('active')
-                this.activeItem = null
-            }
-        }
+    get value() {
+        return this.element.value
+    }
 
-        const event = new Event('change', {bubbles: true})
-        this.dispatchEvent(event)
+    /**
+     * Устанавливает новое значение выбранного элемента выпадающего списка.
+     * @param {string} newValue - Новое значение для установки.
+     */
+    set value(newValue) {
+        const selectedOption = this.selectable.querySelector(`[data-value="${newValue}"]`)
+        if (selectedOption && selectedOption.dataset.disabled !== 'true') {
+            this.selectable.setSelectedItem(selectedOption)
+
+            const event = new Event('change', { bubbles: true })
+            this.dispatchEvent(event)
+        }
     }
 
     /**
      * Получает выбранный элемент списка.
-     * @returns {HTMLElement|null} - Выбранный элемент.
+     * @returns {HTMLElement[]} - Выбранный элемент.
      */
-    get selectedItem() {
-        return this.activeItem
+    get selectedItems() {
+        return this.selectable.getSelectedItems()
     }
 
     /**
-     * Добавляет класс 'select-list__item' ко всем дочерним элементам элемента SelectList.
+     * Создает визуальное представление выпадающего списка и скрывает оригинальный элемент <select>.
+     * @private
      */
-    addSelectListItemClass() {
+    createSelect() {
+        this.element.style.display = 'none'
 
-        const childElements = this.element.children
-        for (let i = 0; i < childElements.length; i++) {
-            const elem = childElements[i]
-            elem.classList.add('select-list__item')
-        }
-    }
+        this.selectContainer = document.createElement('div')
+        this.selectContainer.classList.add('select-list')
+        this.selectContainer.tabIndex = this.element.tabIndex
 
-    /**
-     * Инициализирует активный элемент SelectList. Если уже есть элемент с классом 'select-list__item.active',
-     * устанавливает его как активный. В противном случае, если isRequired установлен в true, устанавливает
-     * первый элемент списка как активный и добавляет ему класс 'active'.
-     */
-    initializeActiveItem() {
-        /**
-         * @type {HTMLElement}
-         */
-        const activeItem = this.element.querySelector('.select-list__item.active')
-        if (activeItem) {
-            this.activeItem = activeItem
-        } else if (this.isRequired) {
-            const firstItem = this.element.querySelector('.select-list__item')
-            if (firstItem) {
-                firstItem.classList.add('active')
-                this.activeItem = firstItem
-            }
-        }
 
-        const event = new Event('listUpdate', {bubbles: true})
-        this.dispatchEvent(event)
+        this.element.insertAdjacentElement('afterend', this.selectContainer)
+
+        const options = this.element.querySelectorAll('option')
+        options.forEach(option => {
+            const listItem = document.createElement('div')
+            listItem.classList.add('select-list__item')
+            listItem.textContent = option.textContent
+            listItem.dataset.value = option.value
+            if (option.disabled) listItem.dataset.disabled = 'true'
+            this.selectContainer.appendChild(listItem)
+        })
     }
 
     /**
      * Привязывает события к элементу SelectList для обработки выбора элемента.
      */
     bindEvents() {
-        this.element.addEventListener('click', e => {
-            const selectedItem = e.target.closest('.select-list__item')
+        this.selectable.addEventListener('change', e => {
+            const selectedItem = this.selectable.getSelectedItems()[0]
             if (selectedItem) {
-                this.selectedItem = selectedItem
+                this.element.value = selectedItem.dataset.value
             }
         })
+    }
+    
+    /**
+     * Инициализирует активные элементы списка в соответствии с настройками.
+     * @param {Object} options - Настройки для управления выбором элементов.
+     * @private
+     */
+    initialiseActiveItems(options) {
+        if (options.isRequired) {
+            if (this.element.multiple) {
+                this.querySelectorAll('[selected]').forEach(option => {
+                    this.value = option.value
+                    if (!this.selectable.multiple) this.selectable.multiple = true
+                })
+            } else {
+                const startValue = this.querySelector('[selected]')?.value
+                if (startValue) this.value = startValue
+            }
+        } else {
+            if (this.element.multiple) {
+                this.querySelectorAll('[selected]').forEach(option => {
+                    this.value = option.value
+                    if (!this.selectable.multiple) this.selectable.multiple = true
+                })
 
-        const callback = (mutationList) => {
-            for (const mutation of mutationList) {
-                if (mutation.type !== "childList") return false
-                this.addSelectListItemClass()
-                this.initializeActiveItem()
+                if (this.selectedItems.length < 1) {
+                    const startValue = this.selectable.getSelectedItems()[0]?.dataset.value
+                    if (startValue) this.value = startValue
+                }
+            } else {
+                const startValue = this.querySelector('[selected]')?.value
+                if (startValue) this.value = startValue
             }
         }
-
-        const observer = new MutationObserver(callback)
-
-        observer.observe(this.element, {childList: true})
     }
 }
 

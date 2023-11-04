@@ -2,173 +2,319 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Компоненты ForgeCraft UI</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Компоненты ForgeCraft UI</title>
 
-  <link rel="stylesheet" href="/style.css">
-  <link rel="stylesheet" href="/src/base-style.css">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/src/base-style.css">
 </head>
 
 <body>
 <header>
-  <h1>Компоненты ForgeCraft UI</h1>
+    <h1>Компоненты ForgeCraft UI</h1>
 </header>
 <main>
-  <section class="select-list">
-    <a href="#SelectList" name="SelectList" class="section__title">SelectList</a>
-    <div class="main__column-1">
-      <h3>Выберите элемент из списка:</h3>
-      <p>(isRequired: true)</p>
-      <div class="list-1 select-list">
-        <div class="list-elem select-list__item active">Element 1</div>
-        <div class="list-elem select-list__item">Element 2</div>
-        <div class="list-elem select-list__item">Element 3</div>
-        <div class="list-elem select-list__item">Element 4</div>
-      </div>
-    </div>
-    <div class="main__column-2">
-      <h3>Выберите элемент из списка:</h3>
-      <p>(isRequired: false)</p>
-      <div class="list-2">
-        <div>Element 1</div>
-        <div>Element 2</div>
-        <div>Element 3</div>
-        <div>Element 4</div>
-      </div>
-    </div>
-    <p>
-      Класс <b>SelectList</b> представляет собой список с возможностью выбора элемента. Основные возможности класса включают::
-    </p>
-    <ol>
-      <li>Автоматически отображает активный элемент списка и устанавливает его как выбранный.</li>
-      <li>Поддерживает опцию 'isRequired', которая определяет, должен ли быть выбран хотя бы один элемент (по умолчанию true).</li>
-      <li>Генерирует событие 'change' при изменении выбранного элемента.</li>
-      <li>Поддерживает добавление и удаление элементов.</li>
-      <li>Обновляет список при добавлении или удалении элементов.</li>
-      <li>Позволяет устанавливать выбранный элемент.</li>
-    </ol>
-  </section>
+    <section class="selectable">
+        <a href="#SelectableItems" name="SelectableItems" class="section__title">SelectableItems</a>
 
-  <section class="select">
-    <a href="#Select" name="Select" class="section__title">Select</a>
-    <div class="main__column-1">
-      <h3>Выберите элемент из списка:</h3>
-      <p>(isRequired: true)</p>
-      <select name="cars">
-        <option value="volvo">Volvo</option>
-        <option value="saab" disabled>Saab</option>
-        <option value="mercedes">Mercedes</option>
-        <option value="audi">Audi</option>
-      </select>
-      <select multiple>
-        <option value="volvo">Volvo</option>
-        <option value="saab" disabled>Saab</option>
-        <option value="mercedes">Mercedes</option>
-        <option value="audi">Audi</option>
-      </select>
-    </div>
-  </section>
+        <div class="list-1" tabindex="1">
+            <div>Element 1</div>
+            <div>Element 2</div>
+            <div>Element 3</div>
+            <div>Element 4</div>
+        </div>
+        <p>
+            Класс <b>SelectableItems</b> предоставляет следующие возможности для управления выбираемыми элементами в контейнере:
+        </p>
+        <ol>
+            <li class="bold">
+                Управление выбором элементов:
+                <ul>
+                    <li>Поддержка выбора одного или нескольких элементов внутри контейнера.</li>
+                    <li>Возможность настройки обязательного выбора хотя бы одного элемента с помощью опции <b>isRequired</b>.</li>
+                    <li>Возможность настройки множественного выбора с помощью опции <b>multiple</b>.</li>
+                </ul>
+            </li>
+            <li class="bold">
+                Навигация и управление клавиатурой:
+                <ul>
+                    <li>Поддержка навигации с клавиатуры с использованием настраиваемых клавиш (по умолчанию 'ArrowUp', 'ArrowDown', 'Enter').</li>
+                    <li>Обработка клавиатурных событий для переключения активных элементов и подтверждения выбора.</li>
+                </ul>
+            </li>
+            <li class="bold">
+                Создание визуального представления списка:
+                <ul>
+                    <li>Добавление класса 'selectable' к контейнеру списка.</li>
+                    <li>Добавление класса 'selectable-item' к элементам списка.</li>
+                </ul>
+            </li>
+            <li class="bold">
+                Методы:
+                <ul>
+                    <li>Метод <b>toggleItem(item)</b> позволяет переключать состояние выбора для элемента.</li>
+                    <li>Метод <b>getSelectedItems()</b> возвращает массив выбранных элементов.</li>
+                    <li>Метод <b>setSelectedItem(indexOrElement)</b> позволяет устанавливать выбранный элемент по его индексу или HTMLElement.</li>
+                    <li>Обработка события 'listUpdate', которое возникает при обновлении списка элементов.</li>
+                </ul>
+            </li>
+            <li class="bold">
+                Привязка событий:
+                <ul>
+                    <li>Вызов события 'change' при выборе элемента.</li>
+                    <li>Вызов события 'listUpdate', которое возникает при обновлении списка элементов.</li>
+                </ul>
+            </li>
+        </ol>
 
-  <section class="tabs">
-    <a href="#WindowTabs" name="WindowTabs" class="section__title">WindowTabs</a>
-    <div class="tabs-container">
-      <!-- Вкладки -->
-      <div class="tabs-header" tabindex="1">
-        <div data-tab-target="tab-1">Tab 1</div>
-        <div data-tab-target="tab-2">Tab 2</div>
-        <div data-tab-target="tab-3">Tab 3</div>
-      </div>
-      <!-- Окна для вкладок -->
-      <div class="tabs-windows">
-        <div data-tab-content="tab-1-content">Content for Tab 1</div>
-        <div data-tab-content="tab-2-content">Content for Tab 2</div>
-        <div data-tab-content="tab-3-content">Content for Tab 3</div>
-      </div>
-    </div>
-    <p>
-      Класс <b>WindowTabs</b> предоставляет удобный интерфейс с вкладками и окнами для управления контентом. Возможности класса включают:
-    </p>
-    <ol>
-      <li>Создание вкладок с соответствующими окнами контента.</li>
-      <li>Установка активной вкладки и отображение соответствующего окна.</li>
-      <li>Добавление и удаление вкладок и их связанных окон.</li>
-      <li>Позволяет управлять видимостью вкладок и окон.</li>
-      <li>Предоставляет событие 'changeWindow' при изменении активного окна.</li>
-      <li>Поддержка управления с клавиатуры (при включенной опции).</li>
-    </ol>
-  </section>
+    </section>
 
-  <section class="dropdown">
-    <a href="#Dropdown" name="Dropdown" class="section__title">Dropdown</a>
-    <select class="drop">
-      <option value="volvo">Volvo</option>
-      <option value="saab" disabled>Saab</option>
-      <option value="mercedes">Mercedes</option>
-      <option value="audi">Audi</option>
-    </select>
-    <p>
-      Класс <b>Dropdown</b> обладает различными функциональностями:
-    </p>
-    <ol>
-      <li>Позволяет создавать выпадающий список на основе элемента <b>select</b>.</li>
-      <li>Предоставляет возможность отображать текст-плейсхолдер, когда ни один элемент не выбран.</li>
-      <li>Позволяет устанавливать максимальное количество элементов в выпадающем списке без необходимости прокрутки.</li>
-      <li>Позволяет устанавливать и получать значения выбранного элемента.</li>
-      <li>Позволяет устанавливать и получать значения выбранного элемента.</li>
-      <li>Автоматически обновляет стили выпадающего списка в зависимости от настроек, включая динамическую проверку прокрутки и позиционирование списка относительно кнопки.</li>
-      <li>Дает возможность изменять выбранный вариант с использованием колесика мыши.</li>
-      <li>Позволяет запрещать выбор определенных вариантов в списке.</li>
-    </ol>
-  </section>
+    <section class="select">
+        <a href="#SelectList" name="SelectList" class="section__title">SelectList</a>
+        <div class="main__column-1">
+            <h3>Выберите элемент из списка:</h3>
+            <p>(isRequired: true)</p>
+            <label>
+                <select name="list-1">
+                    <option value="1">Element 1</option>
+                    <option value="2">Element 2</option>
+                    <option value="3">Element 3</option>
+                    <option value="4">Element 4</option>
+                </select>
+            </label>
+        </div>
+        <div class="main__column-2">
+            <h3>Выберите элемент из списка:</h3>
+            <p>(isRequired: false, multiple)</p>
+            <label>
+                <select name="list-2" multiple>
+                    <option value="1">Element 1</option>
+                    <option value="2" selected>Element 2</option>
+                    <option value="3">Element 3</option>
+                    <option value="4" selected>Element 4</option>
+                </select>
+            </label>
+        </div>
+        <p>
+            Класс <b>SelectList</b> предоставляет следующие возможности:
+        </p>
+        <ol>
+            <li class="bold">
+                Создание списка с возможностью выбора элементов:
+                <ul>
+                    <li>Инициализация нового объекта <b>SelectList</b> для управления выбором элементов внутри элемента <b>select</b>.</li>
+                    <li>Возможность настройки обязательного выбора хотя бы одного элемента с помощью опции <b>isRequired</b>.</li>
+                    <li>Возможность настройки множественного выбора с помощью атрибута <b>multiple</b> у <b>select</b>.</li>
+                </ul>
+            </li>
+            <li class="bold">
+                Навигация и управление клавиатурой:
+                <ul>
+                    <li>Поддержка навигации по элементам с клавиатуры с использованием настраиваемых клавиш (по умолчанию 'ArrowUp', 'ArrowDown', 'Enter').</li>
+                    <li>Методы для программного изменения выбранного элемента и обработки клавиатурных событий.</li>
+                </ul>
+            </li>
+            <li class="bold">
+                Свойства класса:
+                <ul>
+                    <li>Получение и установка текущего выбранного элемента выпадающего списка с помощью свойства <b>value</b>.</li>
+                    <li>Получение выбранных элементов списка с помощью свойства <b>selectedItems</b>.</li>
+                </ul>
+            </li>
+            <li class="bold">
+                Создание визуального представления списка:
+                <ul>
+                    <li>Скрытие оригинального элемента <b>select</b> и создание пользовательского визуального элемента выпадающего списка.</li>
+                    <li>Добавление класса 'select-list' к созданному контейнеру выпадающего списка.</li>
+                </ul>
+            </li>
+            <li class="bold">
+                Привязка событий:
+                <ul>
+                    <li>Вызов события 'change' при выборе элемента.</li>
+                    <li>Установка выбранного элемента в <b>select</b> при изменении активного элемента в пользовательском выпадающем списке.</li>
+                </ul>
+            </li>
+        </ol>
+
+    </section>
+
+    <section class="dropdown">
+        <a href="#Dropdown" name="Dropdown" class="section__title">Dropdown</a>
+        <label>
+            <select class="drop">
+                <option value="volvo">Volvo</option>
+                <option value="saab" disabled>Saab</option>
+                <option value="mercedes">Mercedes</option>
+                <option value="audi">Audi</option>
+            </select>
+        </label>
+        <p>
+            Класс <b>Dropdown</b> предоставляет следующие возможности:
+        </p>
+        <ol>
+            <li class="bold">
+                Создание выпадающего списка на основе элемента <b>select</b>:
+                <ul>
+                    <li>Инициализация нового объекта <b>Dropdown</b> для управления выбором элементов внутри элемента <b>select</b>.</li>
+                    <li>Отображение текста-плейсхолдера, когда ни один элемент не выбран.</li>
+                    <li>Установка максимального количества элементов в выпадающем списке без необходимости прокрутки.</li>
+                    <li>Автоматическое обновление стилей выпадающего списка в зависимости от настроек, включая динамическую проверку прокрутки и позиционирование списка относительно кнопки.</li>
+                </ul>
+            </li>
+            <li class="bold">
+                Навигация и управление:
+                <ul>
+                    <li>Возможность изменять выбранный вариант с использованием колесика мыши, если курсор над не открытым списком.</li>
+                </ul>
+            </li>
+            <li class="bold">
+                Методы:
+                <ul>
+                    <li>Установка и получение значений выбранного элемента.</li>
+                    <li>Запрещение выбора определенных вариантов в списке.</li>
+                </ul>
+            </li>
+            <li class="bold">
+                Привязка событий:
+                <ul>
+                    <li>Вызов события 'change' при выборе элемента.</li>
+                    <li>Установка выбранного элемента в <b>select</b> при изменении активного элемента в пользовательском выпадающем списке.</li>
+                </ul>
+            </li>
+        </ol>
+
+
+    </section>
+
+    <section class="pages">
+        <a href="#StackedPages" name="StackedPages" class="section__title">StackedPages</a>
+        <div class="page-stack" tabindex="2">
+            <div data-name="tab-1-content" class="active">Content for Tab 1</div>
+            <div data-name="tab-2-content">Content for Tab 2</div>
+            <div data-name="tab-3-content">Content for Tab 3</div>
+        </div>
+        <p>
+            Класс <b>StackedPages</b> предоставляет следующие возможности:
+        </p>
+        <ol>
+            <li class="bold">
+                Управление вкладками и окнами:
+                <ul>
+                    <li>Добавление новых страниц в стек вкладок с помощью метода <b>addPage(content, name)</b>.</li>
+                    <li>Установка контента для страницы по индексу или имени с помощью метода
+                        <b>setPageContent(indexOrName, content)</b>.
+                    </li>
+                </ul>
+            </li>
+            <li class="bold">
+                Навигация с клавиатуры:
+                <ul>
+                    <li>Переключение активных страниц с помощью клавиш "ArrowRight" и "ArrowLeft".</li>
+                    <li>Клавиши можно настроить с помощью <b>nextKey</b> и <b>prevKey</b></li>
+                </ul>
+            </li>
+            <li class="bold">
+                Выбор активных элементов:
+                <ul>
+                    <li>Возможность выбора одного или нескольких активных элементов.</li>
+                    <li>Обязательный выбор активного элемента, если опция <b>isRequired</b> установлена в <b>true</b>.
+                    </li>
+                </ul>
+            </li>
+            <li class="bold">
+                Управление классами:
+                <ul>
+                    <li>Автоматическое добавление класса 'page' ко всем дочерним элементам контейнера вкладок.</li>
+                    <li>Автоматическое добавление класса 'tab-window' ко всем страницам.</li>
+                </ul>
+            </li>
+            <li class="bold">
+                Управление страницами через атрибут <b>data-name</b>:
+                <ul>
+                    <li>Переключение активных элементов по значению атрибута <b>data-name</b> с помощью метода <b>toggleActiveElement(indexOrName)</b>.
+                    </li>
+                </ul>
+            </li>
+            <li class="bold">
+                Расширенные настройки:
+                <ul>
+                    <li>Возможность настройки навигации с клавиатуры (<b>enableKeyboardNavigation</b>).</li>
+                    <li>Возможность выбора нескольких активных элементов (<b>multiple</b>).</li>
+                </ul>
+            </li>
+        </ol>
+    </section>
+
+    <section class="tabs">
+        <a href="#WindowTabs" name="WindowTabs" class="section__title">WindowTabs</a>
+        <div class="tabs-container">
+            <!-- Вкладки -->
+            <div class="tabs-header">
+                <div data-name="tab-1" class="tab">Tab 1</div>
+                <div data-name="tab-2" class="tab">Tab 2</div>
+                <div data-name="tab-3" class="tab">Tab 3</div>
+            </div>
+            <!-- Окна для вкладок -->
+            <div class="tabs-windows" tabindex="1">
+                <div data-name="tab-1-content" class="active">Content for Tab 1</div>
+                <div data-name="tab-2-content">Content for Tab 2</div>
+                <div data-name="tab-3-content">Content for Tab 3</div>
+            </div>
+        </div>
+        <!--        <p>-->
+        <!--            Класс <b>WindowTabs</b> предоставляет удобный интерфейс с вкладками и окнами для управления контентом.-->
+        <!--            Возможности класса включают:-->
+        <!--        </p>-->
+        <!--        <ol>-->
+        <!--            <li>Создание вкладок с соответствующими окнами контента.</li>-->
+        <!--            <li>Установка активной вкладки и отображение соответствующего окна.</li>-->
+        <!--            <li>Добавление и удаление вкладок и их связанных окон.</li>-->
+        <!--            <li>Позволяет управлять видимостью вкладок и окон.</li>-->
+        <!--            <li>Предоставляет событие 'changeWindow' при изменении активного окна.</li>-->
+        <!--            <li>Поддержка управления с клавиатуры (при включенной опции).</li>-->
+        <!--        </ol>-->
+    </section>
+
 </main>
 <footer>
-  © 2023 Ruden. Все права защищены.
+    © 2023 Ruden. Все права защищены.
 </footer>
 <script>
-  let list1
-  let list2
-  let windowTabs
-  let dropdown
-  let selectL
+    let list1
+    let list2
+    let dropdown
+    let pages
+    let selectItem
 </script>
 <script src="/src/ForgeCraft.js"></script>
 <script type="module">
-  import WindowTabs from "./src/components/WindowTabs.js"
-  import Dropdown from "./src/components/Dropdown.js"
-  import SelectList from "./src/components/SelectList.js"
-  import Select from "./src/components/Select.js";
+    import Dropdown from "./src/components/Dropdown.js"
+    import SelectList from "./src/components/SelectList.js"
+    import StackedPages from "./src/components/StackedPages.js"
+    import SelectableItems from "./src/components/SelectableItems.js"
 
+    selectItem = new SelectableItems(document.querySelector('.list-1'), {})
 
-  list1 = new SelectList(document.querySelector('.list-1'), { isRequired: true })
-  list2 = new SelectList(document.querySelector('.list-2'), { isRequired: false })
+    pages = new StackedPages(document.querySelector('.page-stack'))
 
-  const tabs = document.querySelector('.tabs-header')
-  const tabsWindows = document.querySelector('.tabs-windows')
-  windowTabs = new WindowTabs(tabs, tabsWindows)
+    list1 = new SelectList(document.querySelector('select[name="list-1"]'), {isRequired: true})
+    list2 = new SelectList(document.querySelector('select[name="list-2"]'), {isRequired: false})
 
-  const tab1Content = document.createElement('div')
-  tab1Content.textContent = 'Содержимое вкладки 4'
-  windowTabs.addTab('tab-4', 'Вкладка 4', tab1Content)
-
-
-  const select = document.querySelector('select.drop')
-  dropdown = new Dropdown(select, {placeholderText: 'Выберите вариант', maxItems: 3})
-  dropdown.options = [
-    {value: "text1", text: "Text 1"},
-    {value: "text2", text: "Text 2"},
-    {value: "text3", text: "Text 3", disabled: true},
-    {value: "text4", text: "Text 4"},
-    {value: "text5", text: "Text 5"},
-    {value: "text6", text: "Text 6"},
-    {value: "text6", text: "Text 6"},
-    {value: "text7", text: "Text 7"},
-    {value: "text8", text: "Text 8"}
-  ]
-
-  const list3 = document.querySelector('select[name="cars"]')
-  selectL = new Select(list3)
-
+    const select = document.querySelector('select.drop')
+    dropdown = new Dropdown(select, {placeholderText: 'Выберите вариант', maxItems: 3})
+    dropdown.options = [
+        {value: "text1", text: "Text 1"},
+        {value: "text2", text: "Text 2"},
+        {value: "text3", text: "Text 3", disabled: true},
+        {value: "text4", text: "Text 4"},
+        {value: "text5", text: "Text 5"},
+        {value: "text6", text: "Text 6"},
+        {value: "text6", text: "Text 6"},
+        {value: "text7", text: "Text 7"},
+        {value: "text8", text: "Text 8"}
+    ]
 </script>
 </body>
 </html>

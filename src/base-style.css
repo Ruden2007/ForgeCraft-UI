@@ -3,15 +3,21 @@
     color: #aaaaaa;
 }
 
-.select-list__item {
+.select-list__item, .selectable-item {
     display: block;
     padding: 5px 10px;
     cursor: pointer;
 }
 
 .select-list__item:hover,
-.select-list__item.active {
+.select-list__item.active,
+.selectable-item:hover,
+.selectable-item.active {
     background-color: rgba(100, 104, 107, 0.44);
+}
+
+.selectable-item.selected {
+    background-color: rgba(63, 95, 121, 0.44);
 }
 
 
@@ -49,21 +55,25 @@
     background-color: #ddd;
 }
 
-/* Стили для окон вкладок */
-.tabs-windows .tab-window {
+.page-stack {
+    min-height: 150px;
+    border: 1px solid #333333;
+}
+
+.page-stack .page {
     display: none;
     padding: 20px;
     border-top: 1px solid #ccc;
 }
 
-/* Показываем активное окно */
-.tabs-windows .tab-window.active {
+.page-stack .page.active {
     display: block;
 }
 
 .dropdown-container {
     position: relative;
     display: inline-block;
+    width: min-content;
 }
 
 .dropdown-button {
@@ -75,6 +85,7 @@
 .dropdown-list {
     display: none;
     position: absolute;
+    z-index: 10;
     left: 0;
     background-color: #ffffff;
     border: 1px solid #cccccc;

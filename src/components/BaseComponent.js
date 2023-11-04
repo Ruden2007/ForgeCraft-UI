@@ -29,7 +29,15 @@ class BaseComponent {
     }
 
     /**
-     * Геттер для получения внутреннего HTML содержимого элемента SelectList.
+     * Геттер для получения дочерних элементов.
+     * @returns {HTMLCollection} - Внутреннее HTML содержимое элемента.
+     */
+    get children() {
+        return this.element.children
+    }
+
+    /**
+     * Геттер для получения внутреннего HTML содержимого элемента.
      * @returns {string} - Внутреннее HTML содержимое элемента.
      */
     get innerHTML() {
@@ -37,7 +45,7 @@ class BaseComponent {
     }
 
     /**
-     * Сеттер для установки внутреннего HTML содержимого элемента SelectList.
+     * Сеттер для установки внутреннего HTML содержимого элемента.
      * @param {string} html - HTML строка для установки внутреннего содержимого элемента.
      */
     set innerHTML(html) {
@@ -45,7 +53,23 @@ class BaseComponent {
     }
 
     /**
-     * Добавляет слушателя события к элементу SelectList.
+     * Добавляет дочерний элемент к текущему элементу.
+     * @param {Element} child - Элемент, который будет добавлен в качестве дочернего.
+     */
+    appendChild(child) {
+        this.element.appendChild(child)
+    }
+
+    querySelector(selector) {
+        return this.element.querySelector(selector)
+    }
+
+    querySelectorAll(selector) {
+        return this.element.querySelectorAll(selector)
+    }
+
+    /**
+     * Добавляет слушателя события к элементу.
      * @param {string} type - Тип события.
      * @param {Function} listener - Функция-обработчик события.
      */
@@ -60,7 +84,7 @@ class BaseComponent {
     }
 
     /**
-     * Удаляет слушателя события у элемента SelectList.
+     * Удаляет слушателя события у элемента.
      * @param {string} type - Тип события.
      * @param {Function} listener - Функция-обработчик события.
      */
@@ -75,7 +99,7 @@ class BaseComponent {
     }
 
     /**
-     * Инициирует событие у элемента SelectList.
+     * Инициирует событие у элемента.
      * @param {Event} event - Объект события для инициации.
      */
     dispatchEvent(event) {
