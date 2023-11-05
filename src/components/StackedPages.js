@@ -66,14 +66,15 @@ class StackedPages extends BaseComponent {
     }) {
         super(element)
 
-        this.enableKeyboardNavigation = options.enableKeyboardNavigation || true
+        this.enableKeyboardNavigation = options.enableKeyboardNavigation !== undefined ? options.enableKeyboardNavigation : true
         this.nextKey = options.nextKey || 'ArrowRight'
         this.prevKey = options.prevKey || 'ArrowLeft'
 
-        this.multiple = options.multiple || false
-        this.isRequired = options.isRequired || true
+        this.multiple = options.multiple !== undefined ? options.multiple : false
 
-        this.pages = Array.from(element.children)
+        this.isRequired = options.isRequired !== undefined ? options.isRequired : true
+
+        this.pages = Array.from(this.children)
 
         this.addClass('page-stack')
         this.addTabWindowClass()
@@ -89,7 +90,7 @@ class StackedPages extends BaseComponent {
      * @param {number|string} indexOrName - Индекс активного элемента или значение атрибута data-name.
      */
     toggleActiveElement(indexOrName) {
-        let element;
+        let element
         if (typeof indexOrName === 'number') {
             element = this.pages[indexOrName]
         } else if (typeof indexOrName === 'string') {
@@ -152,7 +153,7 @@ class StackedPages extends BaseComponent {
     }
 
     /**
-     * Привязывает события к элементу WindowTabs для обработки выбора вкладок и управления с клавиатуры.
+     * Привязывает события к элементу StackedPages для обработки выбора вкладок и управления с клавиатуры.
      * @private
      */
     bindEvents() {

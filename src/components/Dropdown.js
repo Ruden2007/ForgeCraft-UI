@@ -25,8 +25,8 @@ class Dropdown extends BaseComponent {
         super(selectElement)
         this.placeholderText = options.placeholderText || 'Select an option'
         this._maxItems = options.maxItems
-        this.enableScrollChange = options.enableScrollChange || true
-        this.hideOnClickOut = options.hideOnClickOut || true
+        this.enableScrollChange = options.enableScrollChange !== undefined ? options.enableScrollChange : true
+        this.hideOnClickOut = options.hideOnClickOut !== undefined ? options.hideOnClickOut : true
 
         this.createDropdown()
         this.bindEvents()
