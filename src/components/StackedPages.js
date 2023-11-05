@@ -159,7 +159,6 @@ class StackedPages extends BaseComponent {
     bindEvents() {
         this.addEventListener('keydown', (e) => {
             if (this.enableKeyboardNavigation && !this.multiple) {
-                console.log(e.key)
                 if (e.key === this.nextKey || e.key === this.prevKey) {
                     e.preventDefault()
                     const currentIndex = this.pages.indexOf(this.activeElements[0])

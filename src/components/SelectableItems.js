@@ -170,7 +170,6 @@ class SelectableItems extends BaseComponent {
         })
 
         const callback = (mutationList) => {
-            console.log(mutationList)
             for (const mutation of mutationList) {
                 if (mutation.type !== "childList") return false
                 this.addElementsClass()
