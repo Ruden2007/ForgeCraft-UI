@@ -258,7 +258,7 @@
             </div>
             <!-- Окна для вкладок -->
             <div class="tabs-windows" tabindex="1">
-                <div data-name="tab-1-content" class="active">Content for Tab 1</div>
+                <div data-name="tab-1-content">Content for Tab 1</div>
                 <div data-name="tab-2-content">Content for Tab 2</div>
                 <div data-name="tab-3-content">Content for Tab 3</div>
             </div>
@@ -282,11 +282,12 @@
     © 2023 Ruden. Все права защищены.
 </footer>
 <script>
+    let selectItem
     let list1
     let list2
     let dropdown
     let pages
-    let selectItem
+    let windowTabs
 </script>
 <script src="src/ForgeCraft.js"></script>
 <script type="module">
@@ -294,6 +295,13 @@
     import SelectList from "./src/components/SelectList.js"
     import StackedPages from "./src/components/StackedPages.js"
     import SelectableItems from "./src/components/SelectableItems.js"
+    import WindowTabs from "./src/components/WindowTabs.js"
+
+
+    const tabs = document.querySelector('.tabs-container .tabs-header')
+    const windows = document.querySelector('.tabs-container .tabs-windows')
+
+    windowTabs = new WindowTabs(tabs, windows, {multiple: true, isRequired: false})
 
     selectItem = new SelectableItems(document.querySelector('.list-1'), {})
 
