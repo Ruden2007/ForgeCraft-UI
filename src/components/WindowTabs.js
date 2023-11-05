@@ -20,7 +20,7 @@ class WindowTabs extends BaseComponent {
      * @private
      */
     bindEvents() {
-        this.tabs.addEventListener('change', (e) => {
+        this.tabs.addEventListener('change', () => {
             const tabs = this.tabs.getSelectedItems()
             const openedWindows = []
 
@@ -40,6 +40,9 @@ class WindowTabs extends BaseComponent {
 
                 this.windows.toggleActiveElement(`${tab.dataset.name}-content`)
             })
+
+            const event = new Event('changeWindow', {bubbles: true})
+            this.dispatchEvent(event)
         })
     }
 }
