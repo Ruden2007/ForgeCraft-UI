@@ -302,7 +302,7 @@
     const tabs = document.querySelector('.tabs-container .tabs-header')
     const windows = document.querySelector('.tabs-container .tabs-windows')
 
-    windowTabs = new WindowTabs(tabs, windows, {multiple: true, isRequired: false})
+    windowTabs = new WindowTabs(tabs, windows, {multiple: false, isRequired: true})
 
     selectItem = new SelectableItems(document.querySelector('.list-1'), {})
 
